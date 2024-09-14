@@ -180,7 +180,7 @@ const Dex = new class implements ModdedDex {
 	pokeballs: string[] | null = null;
 
 	//TODO we might want to move this to something like data/petmods
-	readonly modResourcePrefix = 'https://github.com/mochilicius/DH2/tree/13504c20cec0f1faff5b51a7c8d175f1a174f2c8/data/mods/';
+	readonly modResourcePrefix = 'https://raw.githubusercontent.com/mochilicius/DH2/main/data/mods/';
 
 
 	resourcePrefix = (() => {
