@@ -28,7 +28,17 @@ jobs:
       - name: Build client cache
         run: node build full
 
-      # Step 5: Deploy to GitHub Pages (files are already in the 'caches' folder)
+      # Step 5: Create a redirect page (index.html that points to testclient.html)
+      - name: Create redirect to testclient.html
+        run: |
+          echo '<!DOCTYPE html>' > ./caches/index.html
+          echo '<html>' >> ./caches/index.html
+          echo '  <head>' >> ./caches/index.html
+          echo '    <meta http-equiv="refresh" content="0; url=testclient.html" />' >> ./caches/index.html
+          echo '  </head>' >> ./caches/index.html
+          echo '</html>' >> ./caches/index.html
+
+      # Step 6: Deploy to GitHub Pages (files are already in the 'caches' folder)
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
