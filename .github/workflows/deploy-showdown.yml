@@ -28,13 +28,13 @@ jobs:
       - name: Build client cache
         run: node build full
 
-      # Step 5: Rename testclient.html to index.html
+      # Step 5: Rename testclient.html to index.html (without touching the 'caches' folder)
       - name: Rename testclient.html to index.html
-        run: mv ./play.pokemonshowdown.com/testclient.html ./caches/index.html
+        run: mv ./play.pokemonshowdown.com/testclient.html ./play.pokemonshowdown.com/index.html
 
       # Step 6: Deploy to GitHub Pages (files are already in the 'caches' folder)
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./caches # Since files are already in the caches folder, use this path directly
+          publish_dir: ./caches # Since the files are already in the caches folder, use this path directly
