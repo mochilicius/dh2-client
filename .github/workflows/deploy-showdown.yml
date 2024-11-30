@@ -28,15 +28,9 @@ jobs:
       - name: Build client cache
         run: node build full
 
-      # Step 5: Create a redirect page (index.html that points to testclient.html)
-      - name: Create redirect to testclient.html
-        run: |
-          echo '<!DOCTYPE html>' > ./caches/index.html
-          echo '<html>' >> ./caches/index.html
-          echo '  <head>' >> ./caches/index.html
-          echo '    <meta http-equiv="refresh" content="0; url=testclient.html" />' >> ./caches/index.html
-          echo '  </head>' >> ./caches/index.html
-          echo '</html>' >> ./caches/index.html
+      # Step 5: Rename testclient.html to index.html
+      - name: Rename testclient.html to index.html
+        run: mv ./play.pokemonshowdown.com/testclient.html ./caches/index.html
 
       # Step 6: Deploy to GitHub Pages (files are already in the 'caches' folder)
       - name: Deploy to GitHub Pages
