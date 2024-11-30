@@ -1,0 +1,48 @@
+name: Build and Deploy Pokémon Showdown
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16 # Use the appropriate Node.js version for Pokémon Showdown
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Build server cache
+      - name: Build client cache
+        run: node build full
+
+      # Step 5: Move cache files to the 'caches' folder
+      - name: Move cache files
+        run: |
+          mkdir -p caches
+          mv dist/* caches/ # Ensure the correct output directory from the build
+
+      # Step 6: Prepare 'testclient.html' for GitHub Pages
+      - name: Prepare testclient.html
+        run: |
+          mkdir -p gh-pages
+          cp play.pokemonshowdown.com/testclient.html gh-pages/index.html
+
+      # Step 7: Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./gh-pages
