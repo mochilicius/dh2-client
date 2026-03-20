@@ -1,0 +1,9 @@
+tunnel: dh2
+credentials-file: C:\Users\3853827\.cloudflared\46ab6d43-13e2-4b2c-ab83-f96d9d4e7d08.json
+
+ingress:
+  - hostname: pokemon.mochilicius.com
+    service: http://localhost:8080
+  - hostname: pokemon-backend.mochilicius.com
+    service: http://localhost:8000
+  - service: http_status:404

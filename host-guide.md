@@ -118,6 +118,12 @@ Cloudflare Tunnel lets you expose local services to your domain without opening 
 
 Download from [https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/) and install it.
 
+Or run 
+```bash
+winget install --id Cloudflare.cloudflared 
+```
+
+
 On Windows, place `cloudflared.exe` somewhere in your PATH, or run it from its directory.
 
 ### Authenticate
@@ -134,13 +140,18 @@ cloudflared tunnel create dh2
 ```
 Note the tunnel ID printed (e.g. `abc123...`). You'll need it below.
 
+"Tunnel credentials written to C:\Users\3853827\.cloudflared\46ab6d43-13e2-4b2c-ab83-f96d9d4e7d08.json. cloudflared chose this file based on where your origin certificate was found. Keep this file secret. To revoke these credentials, delete the tunnel.
+
+Created tunnel dh2 with id 46ab6d43-13e2-4b2c-ab83-f96d9d4e7d08
+2026-03-20T14:58:38Z WRN Your version 2025.8.1 is outdated. We recommend upgrading it to 2026.3.0"
+
 ### Configure the tunnel
 
-Create a config file at `~/.cloudflared/config.yml` (on Windows: `C:\Users\YOUR_USERNAME\.cloudflared\config.yml`):
+Create a config file at `config.yml` in the dh2-client root:
 
 ```yaml
 tunnel: dh2
-credentials-file: C:\Users\YOUR_USERNAME\.cloudflared\dh2.json
+credentials-file: C:\Users\YOUR_USERNAME\.cloudflared\TUNNEL_ID.json
 
 ingress:
   - hostname: pokemon.mochilicius.com
@@ -150,7 +161,7 @@ ingress:
   - service: http_status:404
 ```
 
-Replace `YOUR_USERNAME` with your actual Windows username.
+Replace `YOUR_USERNAME` with your actual Windows username, and `TUNNEL_ID` with the UUID printed when you ran `cloudflared tunnel create` (e.g. `46ab6d43-...`).
 
 ### Create DNS records
 
@@ -163,8 +174,18 @@ cloudflared tunnel route dns dh2 pokemon-backend.mochilicius.com
 ### Start the tunnel
 
 ```bash
-cloudflared tunnel run dh2
+cloudflared tunnel --config config.yml run dh2
 ```
+
+### Start everything at once
+
+Instead of running each command manually, use the included batch script from the dh2-client root:
+
+```bash
+.\start.bat
+```
+
+This opens 3 separate terminal windows for each service with labeled titles.
 
 With both the server (`node pokemon-showdown`), client server (`python -m http.server 8080`), and tunnel running, your services will be live at:
 - Client: `https://pokemon.mochilicius.com`
